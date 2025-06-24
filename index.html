@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronologia Storica - Tracker di Eventi e Persone</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/timeline.css">
+    <link rel="stylesheet" href="styles/forms.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">📚 Cronologia Storica</h1>
+            <nav class="nav">
+                <button class="nav-btn active" data-tab="timeline">Timeline</button>
+                <button class="nav-btn" data-tab="events">Eventi</button>
+                <button class="nav-btn" data-tab="people">Persone</button>
+                <button class="nav-btn" data-tab="search">Ricerca</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Timeline Tab -->
+            <section id="timeline-tab" class="tab-content active">
+                <div class="tab-header">
+                    <h2>Timeline Storica</h2>
+                    <div class="controls">
+                        <select id="timeline-filter" class="filter-select">
+                            <option value="all">Tutti i periodi</option>
+                            <option value="ancient">Antichità</option>
+                            <option value="medieval">Medioevo</option>
+                            <option value="renaissance">Rinascimento</option>
+                            <option value="modern">Età Moderna</option>
+                            <option value="contemporary">Età Contemporanea</option>
+                        </select>
+                        <button id="timeline-sort" class="btn-secondary">Ordina per data</button>
+                    </div>
+                </div>
+                <div id="timeline-container" class="timeline-container">
+                    <!-- Timeline items will be generated here -->
+                </div>
+            </section>
+
+            <!-- Events Tab -->
+            <section id="events-tab" class="tab-content">
+                <div class="tab-header">
+                    <h2>Gestione Eventi</h2>
+                    <button id="add-event-btn" class="btn-primary">+ Aggiungi Evento</button>
+                </div>
+                <div class="events-grid" id="events-grid">
+                    <!-- Events will be displayed here -->
+                </div>
+            </section>
+
+            <!-- People Tab -->
+            <section id="people-tab" class="tab-content">
+                <div class="tab-header">
+                    <h2>Persone Storiche</h2>
+                    <button id="add-person-btn" class="btn-primary">+ Aggiungi Persona</button>
+                </div>
+                <div class="people-grid" id="people-grid">
+                    <!-- People will be displayed here -->
+                </div>
+            </section>
+
+            <!-- Search Tab -->
+            <section id="search-tab" class="tab-content">
+                <div class="tab-header">
+                    <h2>Ricerca Avanzata</h2>
+                </div>
+                <div class="search-container">
+                    <div class="search-form">
+                        <input type="text" id="search-input" placeholder="Cerca eventi, persone, date..." class="search-input">
+                        <div class="search-filters">
+                            <label>
+                                <input type="checkbox" id="search-events" checked> Eventi
+                            </label>
+                            <label>
+                                <input type="checkbox" id="search-people" checked> Persone
+                            </label>
+                            <select id="search-period" class="filter-select">
+                                <option value="all">Tutti i periodi</option>
+                                <option value="ancient">Antichità</option>
+                                <option value="medieval">Medioevo</option>
+                                <option value="renaissance">Rinascimento</option>
+                                <option value="modern">Età Moderna</option>
+                                <option value="contemporary">Età Contemporanea</option>
+                            </select>
+                        </div>
+                        <button id="search-btn" class="btn-primary">Cerca</button>
+                    </div>
+                    <div id="search-results" class="search-results">
+                        <!-- Search results will appear here -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal for adding/editing events -->
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="event-modal-title">Aggiungi Evento</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="event-form" class="form">
+                <div class="form-group">
+                    <label for="event-title">Titolo *</label>
+                    <input type="text" id="event-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-date">Data *</label>
+                    <input type="date" id="event-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-period">Periodo Storico</label>
+                    <select id="event-period">
+                        <option value="ancient">Antichità</option>
+                        <option value="medieval">Medioevo</option>
+                        <option value="renaissance">Rinascimento</option>
+                        <option value="modern">Età Moderna</option>
+                        <option value="contemporary">Età Contemporanea</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event-description">Descrizione</label>
+                    <textarea id="event-description" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="event-location">Luogo</label>
+                    <input type="text" id="event-location">
+                </div>
+                <div class="form-group">
+                    <label for="event-people">Persone Coinvolte</label>
+                    <input type="text" id="event-people" placeholder="Separa con virgole">
+                </div>
+                <div class="form-group">
+                    <label for="event-importance">Importanza</label>
+                    <select id="event-importance">
+                        <option value="low">Bassa</option>
+                        <option value="medium" selected>Media</option>
+                        <option value="high">Alta</option>
+                        <option value="critical">Critica</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancel-event">Annulla</button>
+                    <button type="submit" class="btn-primary">Salva Evento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for adding/editing people -->
+    <div id="person-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="person-modal-title">Aggiungi Persona</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="person-form" class="form">
+                <div class="form-group">
+                    <label for="person-name">Nome *</label>
+                    <input type="text" id="person-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="person-birth">Data di Nascita</label>
+                    <input type="date" id="person-birth">
+                </div>
+                <div class="form-group">
+                    <label for="person-death">Data di Morte</label>
+                    <input type="date" id="person-death">
+                </div>
+                <div class="form-group">
+                    <label for="person-role">Ruolo/Professione</label>
+                    <input type="text" id="person-role">
+                </div>
+                <div class="form-group">
+                    <label for="person-biography">Biografia</label>
+                    <textarea id="person-biography" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="person-achievements">Principali Realizzazioni</label>
+                    <textarea id="person-achievements" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="person-period">Periodo Storico</label>
+                    <select id="person-period">
+                        <option value="ancient">Antichità</option>
+                        <option value="medieval">Medioevo</option>
+                        <option value="renaissance">Rinascimento</option>
+                        <option value="modern">Età Moderna</option>
+                        <option value="contemporary">Età Contemporanea</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancel-person">Annulla</button>
+                    <button type="submit" class="btn-primary">Salva Persona</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/storage.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/people.js"></script>
+    <script src="js/timeline.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

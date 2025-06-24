@@ -1,0 +1,617 @@
+/**
+ * App Manager - Gestisce l'applicazione principale e la navigazione
+ */
+class AppManager {
+    constructor() {
+        this.currentTab = 'timeline';
+        this.isInitialized = false;
+        this.managers = {};
+        this.init();
+    }
+
+    /**
+     * Inizializza l'applicazione
+     */
+    async init() {
+        try {
+            // Attendi che il DOM sia caricato
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => this.initializeApp());
+            } else {
+                this.initializeApp();
+            }
+        } catch (error) {
+            console.error('Errore nell\'inizializzazione dell\'app:', error);
+            this.showErrorMessage('Errore nell\'inizializzazione dell\'applicazione');
+        }
+    }
+
+    /**
+     * Inizializza l'applicazione dopo il caricamento del DOM
+     */
+    initializeApp() {
+        try {
+            // Inizializza storage
+            this.initializeStorage();
+            
+            // Inizializza navigazione
+            this.initializeNavigation();
+            
+            // Inizializza managers
+            this.initializeManagers();
+            
+            // Carica dati iniziali
+            this.loadInitialData();
+            
+            // Imposta tab iniziale
+            this.setActiveTab(this.currentTab);
+            
+            // Inizializza eventi globali
+            this.bindGlobalEvents();
+            
+            // Mostra statistiche iniziali
+            this.updateStats();
+            
+            this.isInitialized = true;
+            console.log('Applicazione inizializzata con successo');
+            
+        } catch (error) {
+            console.error('Errore nell\'inizializzazione:', error);
+            this.showErrorMessage('Errore nell\'inizializzazione dell\'applicazione');
+        }
+    }
+
+    /**
+     * Inizializza il sistema di storage
+     */
+    initializeStorage() {
+        if (typeof storageManager === 'undefined') {
+            throw new Error('StorageManager non trovato');
+        }
+        
+        // Verifica che il storage funzioni
+        try {
+            storageManager.getEvents();
+            storageManager.getPeople();
+        } catch (error) {
+            console.warn('Errore nel caricamento dati, inizializzazione storage vuoto:', error);
+            storageManager.initializeEmptyStorage();
+        }
+    }
+
+    /**
+     * Inizializza la navigazione tra tab
+     */
+    initializeNavigation() {
+        const tabButtons = document.querySelectorAll('[data-tab]');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Collega eventi ai bottoni delle tab
+        tabButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabName = button.dataset.tab;
+                this.setActiveTab(tabName);
+            });
+        });
+        
+        // Nasconde tutti i contenuti delle tab inizialmente
+        tabContents.forEach(content => {
+            content.style.display = 'none';
+        });
+    }
+
+    /**
+     * Inizializza i managers
+     */
+    initializeManagers() {
+        // Verifica che i managers siano disponibili
+        const requiredManagers = ['eventsManager', 'peopleManager', 'timelineManager', 'searchManager'];
+        
+        requiredManagers.forEach(managerName => {
+            if (typeof window[managerName] !== 'undefined') {
+                this.managers[managerName] = window[managerName];
+                console.log(`${managerName} inizializzato`);
+            } else {
+                console.warn(`${managerName} non trovato`);
+            }
+        });
+    }
+
+    /**
+     * Carica i dati iniziali
+     */
+    loadInitialData() {
+        // Renderizza timeline
+        if (this.managers.timelineManager) {
+            this.managers.timelineManager.renderTimeline();
+        }
+        
+        // Renderizza persone
+        if (this.managers.peopleManager) {
+            this.managers.peopleManager.renderPeople();
+        }
+        
+        // Renderizza eventi
+        if (this.managers.eventsManager) {
+            this.managers.eventsManager.renderEvents();
+        }
+    }
+
+    /**
+     * Imposta la tab attiva
+     */
+    setActiveTab(tabName) {
+        // Aggiorna bottoni
+        const tabButtons = document.querySelectorAll('[data-tab]');
+        tabButtons.forEach(button => {
+            if (button.dataset.tab === tabName) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
+        
+        // Aggiorna contenuti
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => {
+            if (content.id === `${tabName}-tab`) {
+                content.style.display = 'block';
+                content.classList.add('active');
+            } else {
+                content.style.display = 'none';
+                content.classList.remove('active');
+            }
+        });
+        
+        this.currentTab = tabName;
+        
+        // Aggiorna URL senza ricaricare la pagina
+        if (history.pushState) {
+            const newUrl = `${window.location.pathname}#${tabName}`;
+            history.pushState({ tab: tabName }, '', newUrl);
+        }
+        
+        // Trigger evento di cambio tab
+        this.onTabChange(tabName);
+    }
+
+    /**
+     * Gestisce il cambio di tab
+     */
+    onTabChange(tabName) {
+        // Aggiorna dati quando necessario
+        switch (tabName) {
+            case 'timeline':
+                if (this.managers.timelineManager) {
+                    this.managers.timelineManager.renderTimeline();
+                }
+                break;
+            case 'events':
+                if (this.managers.eventsManager) {
+                    this.managers.eventsManager.renderEvents();
+                }
+                break;
+            case 'people':
+                if (this.managers.peopleManager) {
+                    this.managers.peopleManager.renderPeople();
+                }
+                break;
+        }
+        
+        // Aggiorna statistiche
+        this.updateStats();
+        
+        // Dispatch evento personalizzato
+        document.dispatchEvent(new CustomEvent('tabChanged', {
+            detail: { tabName, previousTab: this.currentTab }
+        }));
+    }
+
+    /**
+     * Collega eventi globali
+     */
+    bindGlobalEvents() {
+        // Gestione del browser back/forward
+        window.addEventListener('popstate', (e) => {
+            const hash = window.location.hash.substring(1);
+            if (hash && this.isValidTab(hash)) {
+                this.setActiveTab(hash);
+            }
+        });
+        
+        // Gestione dell'hash iniziale
+        const initialHash = window.location.hash.substring(1);
+        if (initialHash && this.isValidTab(initialHash)) {
+            this.currentTab = initialHash;
+        }
+        
+        // Scorciatoie da tastiera
+        document.addEventListener('keydown', (e) => {
+            this.handleKeyboardShortcuts(e);
+        });
+        
+        // Gestione errori globali
+        window.addEventListener('error', (e) => {
+            console.error('Errore globale:', e.error);
+            this.showErrorMessage('Si è verificato un errore imprevisto');
+        });
+        
+        // Salvataggio automatico
+        this.setupAutoSave();
+        
+        // Gestione visibilità pagina
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                this.onPageVisible();
+            }
+        });
+    }
+
+    /**
+     * Gestisce le scorciatoie da tastiera
+     */
+    handleKeyboardShortcuts(e) {
+        // Solo se non si sta scrivendo in un input
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+            return;
+        }
+        
+        // Ctrl/Cmd + tasti
+        if (e.ctrlKey || e.metaKey) {
+            switch (e.key) {
+                case '1':
+                    e.preventDefault();
+                    this.setActiveTab('timeline');
+                    break;
+                case '2':
+                    e.preventDefault();
+                    this.setActiveTab('events');
+                    break;
+                case '3':
+                    e.preventDefault();
+                    this.setActiveTab('people');
+                    break;
+                case 'f':
+                    e.preventDefault();
+                    this.focusSearch();
+                    break;
+                case 's':
+                    e.preventDefault();
+                    this.saveData();
+                    break;
+                case 'e':
+                    e.preventDefault();
+                    this.exportData();
+                    break;
+            }
+        }
+        
+        // Tasti singoli
+        switch (e.key) {
+            case 'Escape':
+                this.closeAllModals();
+                break;
+        }
+    }
+
+    /**
+     * Verifica se una tab è valida
+     */
+    isValidTab(tabName) {
+        const validTabs = ['timeline', 'events', 'people', 'search'];
+        return validTabs.includes(tabName);
+    }
+
+    /**
+     * Focalizza la ricerca
+     */
+    focusSearch() {
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+        }
+    }
+
+    /**
+     * Chiude tutti i modal aperti
+     */
+    closeAllModals() {
+        const modals = document.querySelectorAll('.modal.show');
+        modals.forEach(modal => {
+            modal.classList.remove('show');
+        });
+    }
+
+    /**
+     * Salva i dati
+     */
+    saveData() {
+        try {
+            // I dati sono già salvati automaticamente nel localStorage
+            this.showSuccessMessage('Dati salvati automaticamente!');
+        } catch (error) {
+            console.error('Errore nel salvataggio:', error);
+            this.showErrorMessage('Errore nel salvataggio dei dati');
+        }
+    }
+
+    /**
+     * Esporta i dati
+     */
+    exportData() {
+        try {
+            const data = {
+                events: storageManager.getEvents(),
+                people: storageManager.getPeople(),
+                settings: storageManager.getSettings(),
+                exportDate: new Date().toISOString(),
+                version: '1.0.0'
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `timeline-storica-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            this.showSuccessMessage('Dati esportati con successo!');
+        } catch (error) {
+            console.error('Errore nell\'esportazione:', error);
+            this.showErrorMessage('Errore nell\'esportazione dei dati');
+        }
+    }
+
+    /**
+     * Importa i dati
+     */
+    importData(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Valida i dati
+                    if (!this.validateImportData(data)) {
+                        throw new Error('Formato file non valido');
+                    }
+                    
+                    // Conferma importazione
+                    if (confirm('Importare i dati? Questo sostituirà tutti i dati esistenti.')) {
+                        storageManager.importData(data);
+                        this.loadInitialData();
+                        this.updateStats();
+                        this.showSuccessMessage('Dati importati con successo!');
+                        resolve(data);
+                    } else {
+                        reject(new Error('Importazione annullata'));
+                    }
+                } catch (error) {
+                    console.error('Errore nell\'importazione:', error);
+                    this.showErrorMessage('Errore nell\'importazione: ' + error.message);
+                    reject(error);
+                }
+            };
+            
+            reader.onerror = () => {
+                reject(new Error('Errore nella lettura del file'));
+            };
+            
+            reader.readAsText(file);
+        });
+    }
+
+    /**
+     * Valida i dati di importazione
+     */
+    validateImportData(data) {
+        return data && 
+               Array.isArray(data.events) && 
+               Array.isArray(data.people) && 
+               typeof data.settings === 'object';
+    }
+
+    /**
+     * Configura il salvataggio automatico
+     */
+    setupAutoSave() {
+        // Salva ogni 30 secondi se ci sono modifiche
+        setInterval(() => {
+            if (storageManager.hasUnsavedChanges && storageManager.hasUnsavedChanges()) {
+                this.saveData();
+            }
+        }, 30000);
+    }
+
+    /**
+     * Gestisce quando la pagina diventa visibile
+     */
+    onPageVisible() {
+        // Aggiorna i dati se necessario
+        this.updateStats();
+        
+        // Ricarica la tab corrente
+        this.onTabChange(this.currentTab);
+    }
+
+    /**
+     * Aggiorna le statistiche
+     */
+    updateStats() {
+        try {
+            const stats = storageManager.getStats();
+            
+            // Aggiorna contatori nell'header
+            const eventsCount = document.getElementById('events-count');
+            const peopleCount = document.getElementById('people-count');
+            
+            if (eventsCount) {
+                eventsCount.textContent = stats.totalEvents;
+            }
+            
+            if (peopleCount) {
+                peopleCount.textContent = stats.totalPeople;
+            }
+            
+            // Aggiorna badge delle tab
+            this.updateTabBadges(stats);
+            
+        } catch (error) {
+            console.error('Errore nell\'aggiornamento statistiche:', error);
+        }
+    }
+
+    /**
+     * Aggiorna i badge delle tab
+     */
+    updateTabBadges(stats) {
+        const timelineTab = document.querySelector('[data-tab="timeline"]');
+        const eventsTab = document.querySelector('[data-tab="events"]');
+        const peopleTab = document.querySelector('[data-tab="people"]');
+        
+        // Rimuovi badge esistenti
+        document.querySelectorAll('.tab-badge').forEach(badge => badge.remove());
+        
+        // Aggiungi nuovi badge
+        if (timelineTab && stats.totalEvents > 0) {
+            this.addTabBadge(timelineTab, stats.totalEvents);
+        }
+        
+        if (eventsTab && stats.totalEvents > 0) {
+            this.addTabBadge(eventsTab, stats.totalEvents);
+        }
+        
+        if (peopleTab && stats.totalPeople > 0) {
+            this.addTabBadge(peopleTab, stats.totalPeople);
+        }
+    }
+
+    /**
+     * Aggiunge un badge a una tab
+     */
+    addTabBadge(tabElement, count) {
+        const badge = document.createElement('span');
+        badge.className = 'tab-badge';
+        badge.textContent = count;
+        tabElement.appendChild(badge);
+    }
+
+    /**
+     * Ottiene informazioni sull'applicazione
+     */
+    getAppInfo() {
+        return {
+            version: '1.0.0',
+            initialized: this.isInitialized,
+            currentTab: this.currentTab,
+            managers: Object.keys(this.managers),
+            stats: storageManager.getStats()
+        };
+    }
+
+    /**
+     * Resetta l'applicazione
+     */
+    resetApp() {
+        if (confirm('Sei sicuro di voler resettare tutti i dati? Questa azione non può essere annullata.')) {
+            try {
+                storageManager.clearAllData();
+                this.loadInitialData();
+                this.updateStats();
+                this.showSuccessMessage('Applicazione resettata con successo!');
+            } catch (error) {
+                console.error('Errore nel reset:', error);
+                this.showErrorMessage('Errore nel reset dell\'applicazione');
+            }
+        }
+    }
+
+    // === UTILITÀ ===
+
+    /**
+     * Mostra messaggio di successo
+     */
+    showSuccessMessage(message) {
+        this.showToast(message, 'success');
+    }
+
+    /**
+     * Mostra messaggio di errore
+     */
+    showErrorMessage(message) {
+        this.showToast(message, 'error');
+    }
+
+    /**
+     * Mostra un toast
+     */
+    showToast(message, type = 'info') {
+        // Riutilizza la funzione toast esistente o crea una versione semplificata
+        if (this.managers.peopleManager && typeof this.managers.peopleManager.showToast === 'function') {
+            this.managers.peopleManager.showToast(message, type);
+        } else {
+            // Fallback semplice
+            console.log(`${type.toUpperCase()}: ${message}`);
+            
+            // Crea toast semplice
+            const toast = document.createElement('div');
+            toast.className = `simple-toast toast-${type}`;
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+                background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
+            `;
+            
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 3000);
+        }
+    }
+}
+
+// Inizializza l'applicazione
+window.appManager = new AppManager();
+
+// Esporta per uso globale
+window.app = {
+    manager: window.appManager,
+    version: '1.0.0',
+    
+    // API pubbliche
+    setTab: (tabName) => window.appManager.setActiveTab(tabName),
+    exportData: () => window.appManager.exportData(),
+    importData: (file) => window.appManager.importData(file),
+    resetApp: () => window.appManager.resetApp(),
+    getInfo: () => window.appManager.getAppInfo()
+};
+
+// Debug helpers (solo in sviluppo)
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    window.debug = {
+        app: window.appManager,
+        storage: window.storageManager,
+        events: window.eventsManager,
+        people: window.peopleManager,
+        timeline: window.timelineManager,
+        search: window.searchManager
+    };
+    
+    console.log('Debug helpers disponibili in window.debug');
+}
