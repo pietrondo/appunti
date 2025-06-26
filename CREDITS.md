@@ -237,7 +237,7 @@ Questo progetto è aperto ai contributi della community educativa. Ringraziamo i
 Per contributi, suggerimenti o riconoscimenti:
 
 - **Email**: credits@cronologia-storica.com
-- **GitHub**: https://github.com/user/cronologia-storica
+- **GitHub**: https://github.com/pietrondo/appunti
 - **Documentazione**: [DOCUMENTATION.md](./DOCUMENTATION.md)
 
 ---

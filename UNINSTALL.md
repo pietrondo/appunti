@@ -379,7 +379,7 @@ Salva come `uninstall.bat` ed esegui come amministratore.
 Per assistenza durante la disinstallazione:
 
 - **Documentazione**: [DOCUMENTATION.md](./DOCUMENTATION.md)
-- **Issues**: [GitHub Issues](https://github.com/user/cronologia-storica/issues)
+- **Issues**: [GitHub Issues](https://github.com/pietrondo/appunti/issues)
 - **Email**: support@cronologia-storica.com
 
 ---

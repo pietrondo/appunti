@@ -279,8 +279,8 @@ Per contribuire al progetto:
 
 ## Link
 
-- [Repository](https://github.com/user/cronologia-storica)
-- [Issues](https://github.com/user/cronologia-storica/issues)
-- [Releases](https://github.com/user/cronologia-storica/releases)
+ - [Repository](https://github.com/pietrondo/appunti)
+ - [Issues](https://github.com/pietrondo/appunti/issues)
+ - [Releases](https://github.com/pietrondo/appunti/releases)
 - [Documentazione](./DOCUMENTATION.md)
 - [Installazione](./INSTALL.md)

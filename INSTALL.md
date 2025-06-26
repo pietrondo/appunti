@@ -19,13 +19,13 @@
 
 1. **Scarica i file**
    ```bash
-   git clone https://github.com/username/cronologia-storica.git
-   cd cronologia-storica
+   git clone https://github.com/pietrondo/appunti.git
+   cd appunti
    ```
 
 2. **Verifica la struttura dei file**
    ```
-   cronologia-storica/
+   appunti/
    ├── index.html
    ├── config.json
    ├── js/

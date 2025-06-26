@@ -31,7 +31,7 @@ Cronologia Storica è un'applicazione web per tracciare e visualizzare eventi st
 ### Struttura del Progetto
 
 ```
-cronologia-storica/
+appunti/
 ├── index.html              # Pagina principale
 ├── config.json             # Configurazione applicazione
 ├── INSTALL.md              # Guida installazione
@@ -472,7 +472,7 @@ backupManager.restoreFromBackup(backupKey);
 1. **Clone repository**
    ```bash
    git clone <repository-url>
-   cd cronologia-storica
+   cd appunti
    ```
 
 2. **Avvia server locale**
