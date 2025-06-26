@@ -123,6 +123,20 @@ class StorageManager {
         return events.find(e => e.id === eventId) || null;
     }
 
+    /**
+     * Alias compatibilità: ottiene un evento per ID
+     */
+    getEvent(eventId) {
+        return this.getEventById(eventId);
+    }
+
+    /**
+     * Alias compatibilità: ottiene tutti gli eventi
+     */
+    getAllEvents() {
+        return this.getEvents();
+    }
+
     // === GESTIONE PERSONE ===
 
     /**
@@ -184,6 +198,20 @@ class StorageManager {
     getPersonById(personId) {
         const people = this.getPeople();
         return people.find(p => p.id === personId) || null;
+    }
+
+    /**
+     * Alias compatibilità: ottiene una persona per ID
+     */
+    getPerson(personId) {
+        return this.getPersonById(personId);
+    }
+
+    /**
+     * Alias compatibilità: ottiene tutte le persone
+     */
+    getAllPeople() {
+        return this.getPeople();
     }
 
     // === GESTIONE IMPOSTAZIONI ===
@@ -385,3 +413,5 @@ class StorageManager {
 
 // Crea un'istanza globale del storage manager
 window.storageManager = new StorageManager();
+// Alias per compatibilità con vecchia API
+window.storage = window.storageManager;
