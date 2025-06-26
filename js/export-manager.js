@@ -5,7 +5,7 @@ class ExportManager {
     constructor() {
         this.storageManager = null;
         this.logger = null;
-        this.supportedFormats = ['json'];
+        this.supportedFormats = ['json', 'csv'];
         this.exportData = {
             version: '1.0',
             timestamp: null,
@@ -60,6 +60,13 @@ class ExportManager {
                                 <label>
                                     <input type="checkbox" id="export-settings" checked>
                                     Impostazioni dell'applicazione
+                                </label>
+                                <label class="format-select">
+                                    Formato:
+                                    <select id="export-format">
+                                        <option value="json">JSON</option>
+                                        <option value="csv">CSV</option>
+                                    </select>
                                 </label>
                             </div>
                             
@@ -195,41 +202,93 @@ class ExportManager {
     }
 
     /**
-     * Esporta i dati in un file JSON
+     * Esporta i dati nel formato selezionato
      */
     exportData() {
         try {
             const data = this.prepareExportData();
-            const jsonString = JSON.stringify(data, null, 2);
-            const blob = new Blob([jsonString], { type: 'application/json' });
-            
+            const formatSelect = document.getElementById('export-format');
+            const format = formatSelect ? formatSelect.value : 'json';
+            let blob, filename;
+
+            if (format === 'csv') {
+                const csvString = this.exportToCsv(data);
+                blob = new Blob([csvString], { type: 'text/csv' });
+                filename = `appunti-storici-${new Date().toISOString().split('T')[0]}.csv`;
+            } else {
+                const jsonString = JSON.stringify(data, null, 2);
+                blob = new Blob([jsonString], { type: 'application/json' });
+                filename = `appunti-storici-${new Date().toISOString().split('T')[0]}.json`;
+            }
+
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `appunti-storici-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = filename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
             this.showSuccessMessage('Dati esportati con successo!');
-            
+
             if (this.logger) {
                 this.logger.log('Export completed', 'info', {
+                    format,
                     eventsCount: data.events.length,
                     peopleCount: data.people.length,
                     hasSettings: Object.keys(data.settings).length > 0
                 });
             }
-            
+
         } catch (error) {
             console.error('Errore nell\'esportazione:', error);
             this.showErrorMessage('Errore durante l\'esportazione dei dati');
-            
+
             if (this.logger) {
                 this.logger.log('Export failed', 'error', { error: error.message });
             }
         }
+    }
+
+    exportToCsv(data) {
+        const lines = [];
+        if (data.events && data.events.length > 0) {
+            lines.push('type,id,title,date,period,location,importance,people,description');
+            data.events.forEach(event => {
+                const people = Array.isArray(event.people) ? event.people.join('|') : '';
+                lines.push([
+                    'event',
+                    event.id,
+                    `"${(event.title || '').replace(/"/g, '""')}"`,
+                    event.date,
+                    event.period,
+                    `"${(event.location || '').replace(/"/g, '""')}"`,
+                    event.importance,
+                    `"${people.replace(/"/g, '""')}"`,
+                    `"${(event.description || '').replace(/"/g, '""')}"`
+                ].join(','));
+            });
+            lines.push('');
+        }
+
+        if (data.people && data.people.length > 0) {
+            lines.push('type,id,name,birth,death,period,role,achievements,biography');
+            data.people.forEach(person => {
+                lines.push([
+                    'person',
+                    person.id,
+                    `"${(person.name || '').replace(/"/g, '""')}"`,
+                    person.birth || '',
+                    person.death || '',
+                    person.period || '',
+                    `"${(person.role || '').replace(/"/g, '""')}"`,
+                    `"${(person.achievements || '').replace(/"/g, '""')}"`,
+                    `"${(person.biography || '').replace(/"/g, '""')}"`
+                ].join(','));
+            });
+        }
+        return lines.join('\n');
     }
 
     /**
@@ -244,6 +303,10 @@ class ExportManager {
             'Personaggi': data.people.length,
             'Impostazioni': Object.keys(data.settings).length > 0 ? 'Incluse' : 'Non incluse'
         };
+        const formatSelect = document.getElementById('export-format');
+        if (formatSelect) {
+            preview['Formato'] = formatSelect.value.toUpperCase();
+        }
 
         let previewHtml = '<div class="export-preview"><h4>Anteprima esportazione:</h4>';
         for (const [key, value] of Object.entries(preview)) {
