@@ -9,15 +9,15 @@
 
 ## 📋 Indice
 
-- [Caratteristiche](#-caratteristiche)
-- [Demo](#-demo)
-- [Installazione](#-installazione)
-- [Utilizzo](#-utilizzo)
-- [Documentazione](#-documentazione)
-- [Sviluppo](#-sviluppo)
-- [Contribuire](#-contribuire)
-- [Licenza](#-licenza)
-- [Supporto](#-supporto)
+- [Caratteristiche](#caratteristiche)
+- [Demo](#demo)
+- [Installazione](#installazione)
+- [Utilizzo](#utilizzo)
+- [Documentazione](#documentazione)
+- [Sviluppo](#sviluppo)
+- [Contribuire](#contribuire)
+- [Licenza](#licenza)
+- [Supporto](#supporto)
 
 ## ✨ Caratteristiche
 
@@ -284,6 +284,12 @@ runTestCategory('Storage');
 
 // Statistiche test
 getTestStats();
+```
+
+Per eseguire i test da riga di comando:
+
+```bash
+npm test
 ```
 
 ### Convenzioni Codice

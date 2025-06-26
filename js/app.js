@@ -165,15 +165,6 @@ class AppManager {
             console.log('Mind map system initialized');
         }
     }
-    
-    initializeAnalyticsSystem() {
-        if (typeof LearningAnalytics !== 'undefined' && typeof AnalyticsManager !== 'undefined') {
-            this.learningAnalytics = new LearningAnalytics();
-            this.analyticsManager = new AnalyticsManager();
-            console.log('Analytics system initialized');
-        }
-    }
-    
     initializeImportSystem() {
         if (typeof ImportManager !== 'undefined') {
             this.importManager = new ImportManager();
