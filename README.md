@@ -87,8 +87,8 @@
 
 1. **Scarica i file**
    ```bash
-   git clone https://github.com/user/cronologia-storica.git
-   cd cronologia-storica
+   git clone https://github.com/pietrondo/appunti.git
+   cd appunti
    ```
 
 2. **Avvia l'applicazione**
@@ -232,8 +232,8 @@ logger.dataChange('event', 'create');    // Log modifica dati
 
 1. **Clone Repository**
    ```bash
-   git clone https://github.com/user/cronologia-storica.git
-   cd cronologia-storica
+   git clone https://github.com/pietrondo/appunti.git
+   cd appunti
    ```
 
 2. **Avvia Development Server**
@@ -249,7 +249,7 @@ logger.dataChange('event', 'create');    // Log modifica dati
 ### Struttura Progetto
 
 ```
-cronologia-storica/
+appunti/
 ├── 📄 index.html              # Pagina principale
 ├── ⚙️ config.json             # Configurazione
 ├── 📚 DOCUMENTATION.md        # Documentazione
@@ -345,9 +345,9 @@ Questo progetto è rilasciato sotto licenza **GPL-3.0**. Vedi il file [LICENSE](
 ### Ottenere Aiuto
 
 1. **📖 Consulta la documentazione**: [DOCUMENTATION.md](./DOCUMENTATION.md)
-2. **🔍 Cerca nei problemi esistenti**: [Issues](https://github.com/user/cronologia-storica/issues)
+2. **🔍 Cerca nei problemi esistenti**: [Issues](https://github.com/pietrondo/appunti/issues)
 3. **❓ Crea nuovo issue**: Descrivi il problema dettagliatamente
-4. **💬 Discussioni**: [Discussions](https://github.com/user/cronologia-storica/discussions)
+4. **💬 Discussioni**: [Discussions](https://github.com/pietrondo/appunti/discussions)
 
 ### Problemi Comuni
 
@@ -418,11 +418,11 @@ runAllTests();
 
 **Cronologia Storica** - Preserva la storia, costruisci il futuro
 
-[🌟 Stella su GitHub](https://github.com/user/cronologia-storica) • 
-[🐛 Segnala Bug](https://github.com/user/cronologia-storica/issues) • 
-[💡 Richiedi Feature](https://github.com/user/cronologia-storica/issues) • 
+[🌟 Stella su GitHub](https://github.com/pietrondo/appunti) •
+[🐛 Segnala Bug](https://github.com/pietrondo/appunti/issues) •
+[💡 Richiedi Feature](https://github.com/pietrondo/appunti/issues) •
 [📖 Documentazione](./DOCUMENTATION.md)
 
-Realizzato con ❤️ da [Pietro](https://github.com/user)
+Realizzato con ❤️ da [Pietro](https://github.com/pietrondo)
 
 </div>
