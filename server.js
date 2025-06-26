@@ -18,10 +18,12 @@ const mimeTypes = {
 };
 
 const server = http.createServer((req, res) => {
-  let filePath = path.join(base, decodeURIComponent(req.url));
-  if (req.url === '/' || req.url === '') {
-    filePath = path.join(base, 'index.html');
+  const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+  let pathname = decodeURIComponent(parsedUrl.pathname);
+  if (pathname === '/' || pathname === '') {
+    pathname = '/index.html';
   }
+  const filePath = path.join(base, pathname);
   fs.readFile(filePath, (err, content) => {
     if (err) {
       if (err.code === 'ENOENT') {
