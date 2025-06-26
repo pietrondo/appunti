@@ -91,19 +91,9 @@
    cd cronologia-storica
    ```
 
-2. **Avvia server locale**
+2. **Avvia l'applicazione**
    ```bash
-   # Python 3
-   python -m http.server 8000
-   
-   # Python 2
-   python -m SimpleHTTPServer 8000
-   
-   # Node.js
-   npx serve .
-   
-   # PHP
-   php -S localhost:8000
+   npm start
    ```
 
 3. **Apri nel browser**
@@ -399,23 +389,21 @@ runAllTests();
 
 ## 🗺️ Roadmap
 
-### Versione 1.1.0 (Q2 2024)
-- 🌐 Integrazione API esterne
-- 📊 Grafici e statistiche avanzate
-- 🎨 Temi personalizzabili
-- 📱 PWA support
+### Versione 1.3.0 (Q1 2025)
+- 🌙 Tema scuro migliorato
+- `npm start` per avvio rapido
+- Documentazione aggiornata
 
-### Versione 1.2.0 (Q3 2024)
-- ☁️ Sincronizzazione cloud
--   - Integrazione prevista tramite servizio gratuito Supabase
+### Versione 2.0.0 (Q2 2025)
+- ☁️ Sincronizzazione cloud via Supabase
 - 👥 Collaborazione multi-utente
 - 🔌 Sistema plugin
 - 📄 Export PDF avanzato
 
-### Versione 2.0.0 (Q4 2024)
+### Versione 3.0.0 (Q4 2025)
 - 🏗️ Architettura completamente rinnovata
 - 🚀 Performance migliorate
-- 🎯 Nuove funzionalità AI
+- 🤖 Funzionalità AI evolute
 - 🌍 Internazionalizzazione
 
 ---

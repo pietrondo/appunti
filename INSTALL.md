@@ -43,25 +43,9 @@
        └── forms.css
    ```
 
-3. **Avvia un server locale**
-   
-   **Opzione A: Python**
+3. **Avvia l'applicazione**
    ```bash
-   # Python 3
-   python -m http.server 8000
-   
-   # Python 2
-   python -m SimpleHTTPServer 8000
-   ```
-   
-   **Opzione B: Node.js**
-   ```bash
-   npx http-server -p 8000
-   ```
-   
-   **Opzione C: PHP**
-   ```bash
-   php -S localhost:8000
+   npm start
    ```
 
 4. **Apri nel browser**

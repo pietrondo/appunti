@@ -1,0 +1,11 @@
+{
+  "name": "cronologia-storica",
+  "version": "1.3.0",
+  "description": "Appunti e timeline storica",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "GPL-3.0"
+}
