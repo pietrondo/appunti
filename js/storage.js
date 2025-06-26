@@ -412,6 +412,12 @@ class StorageManager {
 }
 
 // Crea un'istanza globale del storage manager
-window.storageManager = new StorageManager();
-// Alias per compatibilità con vecchia API
-window.storage = window.storageManager;
+if (typeof window !== 'undefined') {
+    window.storageManager = new StorageManager();
+    // Alias per compatibilità con vecchia API
+    window.storage = window.storageManager;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = StorageManager;
+}
