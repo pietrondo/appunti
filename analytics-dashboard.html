@@ -1,0 +1,363 @@
+<!-- Learning Analytics Dashboard -->
+<div class="analytics-dashboard" id="analytics-dashboard">
+    <div class="analytics-header">
+        <h1 class="analytics-title">Dashboard Analytics</h1>
+        <button class="analytics-close" id="analytics-close-btn">×</button>
+    </div>
+    
+    <div class="analytics-nav">
+        <button class="analytics-nav-btn active" data-section="overview">Panoramica</button>
+        <button class="analytics-nav-btn" data-section="performance">Performance</button>
+        <button class="analytics-nav-btn" data-section="learning">Apprendimento</button>
+        <button class="analytics-nav-btn" data-section="collaboration">Collaborazione</button>
+        <button class="analytics-nav-btn" data-section="predictions">Predizioni</button>
+        <button class="analytics-nav-btn" data-section="recommendations">Raccomandazioni</button>
+    </div>
+    
+    <div class="analytics-content">
+        <!-- Overview Section -->
+        <div class="analytics-section active" id="overview-section">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Sessioni Totali</span>
+                        <div class="metric-icon">📚</div>
+                    </div>
+                    <div class="metric-value" id="total-sessions">0</div>
+                    <div class="metric-change neutral" id="sessions-change">
+                        <span>↗️</span> +0% questa settimana
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Tempo di Studio</span>
+                        <div class="metric-icon">⏱️</div>
+                    </div>
+                    <div class="metric-value" id="total-study-time">0h</div>
+                    <div class="metric-change neutral" id="time-change">
+                        <span>⏰</span> Media giornaliera
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Streak Giorni</span>
+                        <div class="metric-icon">🔥</div>
+                    </div>
+                    <div class="metric-value" id="streak-days">0</div>
+                    <div class="metric-change neutral" id="streak-change">
+                        <span>📅</span> Giorni consecutivi
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Coinvolgimento</span>
+                        <div class="metric-icon">💪</div>
+                    </div>
+                    <div class="metric-value" id="engagement-score">0%</div>
+                    <div class="metric-change neutral" id="engagement-change">
+                        <span>📊</span> Livello attuale
+                    </div>
+                </div>
+            </div>
+            
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Attività di Studio nel Tempo</h3>
+                        <div class="chart-controls">
+                            <button class="chart-control-btn active" data-period="7d">7g</button>
+                            <button class="chart-control-btn" data-period="30d">30g</button>
+                            <button class="chart-control-btn" data-period="90d">90g</button>
+                        </div>
+                    </div>
+                    <div class="chart-content" id="activity-chart">
+                        Grafico delle attività di studio
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Distribuzione per Tipo di Attività</h3>
+                    </div>
+                    <div class="chart-content" id="activity-distribution-chart">
+                        Grafico a torta delle attività
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performance Section -->
+        <div class="analytics-section" id="performance-section">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Accuratezza Media</span>
+                        <div class="metric-icon">🎯</div>
+                    </div>
+                    <div class="metric-value" id="overall-accuracy">0%</div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="accuracy-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Trend Miglioramento</span>
+                        <div class="metric-icon">📈</div>
+                    </div>
+                    <div class="metric-value" id="improvement-trend">Stabile</div>
+                    <div class="metric-change neutral" id="trend-change">
+                        <span>📊</span> Ultime 10 sessioni
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Ritenzione</span>
+                        <div class="metric-icon">🧠</div>
+                    </div>
+                    <div class="metric-value" id="retention-rate">0%</div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="retention-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Performance per Argomento</h3>
+                    </div>
+                    <div class="chart-content" id="topic-performance-chart">
+                        Grafico performance per argomento
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Evoluzione Accuratezza</h3>
+                    </div>
+                    <div class="chart-content" id="accuracy-evolution-chart">
+                        Grafico evoluzione accuratezza
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Learning Section -->
+        <div class="analytics-section" id="learning-section">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Efficacia Ripetizione</span>
+                        <div class="metric-icon">🔄</div>
+                    </div>
+                    <div class="metric-value" id="spaced-repetition-effectiveness">0%</div>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Ottimale</span>
+                            <span id="sr-effectiveness-label">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="sr-effectiveness-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Velocità Apprendimento</span>
+                        <div class="metric-icon">⚡</div>
+                    </div>
+                    <div class="metric-value" id="learning-velocity">0</div>
+                    <div class="metric-change neutral" id="velocity-change">
+                        <span>📚</span> Concetti/ora
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Padronanza Concetti</span>
+                        <div class="metric-icon">🎓</div>
+                    </div>
+                    <div class="metric-value" id="concept-mastery">0</div>
+                    <div class="metric-change neutral" id="mastery-change">
+                        <span>✅</span> Concetti padroneggiati
+                    </div>
+                </div>
+            </div>
+            
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Distribuzione Tempo di Studio</h3>
+                    </div>
+                    <div class="chart-content" id="time-distribution-chart">
+                        Grafico distribuzione tempo
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Curva di Apprendimento</h3>
+                    </div>
+                    <div class="chart-content" id="learning-curve-chart">
+                        Grafico curva di apprendimento
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Collaboration Section -->
+        <div class="analytics-section" id="collaboration-section">
+            <div class="collaboration-grid">
+                <div class="collaboration-card">
+                    <div class="collaboration-header">
+                        <div class="collaboration-icon">👥</div>
+                        <div class="collaboration-info">
+                            <h3>Gruppi di Studio</h3>
+                            <p>Partecipazione e performance collaborative</p>
+                        </div>
+                    </div>
+                    <div class="collaboration-stats">
+                        <div class="collaboration-stat">
+                            <div class="collaboration-stat-value" id="study-groups-count">0</div>
+                            <div class="collaboration-stat-label">Gruppi Attivi</div>
+                        </div>
+                        <div class="collaboration-stat">
+                            <div class="collaboration-stat-value" id="group-sessions">0</div>
+                            <div class="collaboration-stat-label">Sessioni Gruppo</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="collaboration-card">
+                    <div class="collaboration-header">
+                        <div class="collaboration-icon">🤝</div>
+                        <div class="collaboration-info">
+                            <h3>Peer Learning</h3>
+                            <p>Interazioni e supporto tra pari</p>
+                        </div>
+                    </div>
+                    <div class="collaboration-stats">
+                        <div class="collaboration-stat">
+                            <div class="collaboration-stat-value" id="peer-interactions">0</div>
+                            <div class="collaboration-stat-label">Interazioni</div>
+                        </div>
+                        <div class="collaboration-stat">
+                            <div class="collaboration-stat-value" id="help-given">0</div>
+                            <div class="collaboration-stat-label">Aiuti Forniti</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="collaboration-card">
+                    <div class="collaboration-header">
+                        <div class="collaboration-icon">📚</div>
+                        <div class="collaboration-info">
+                            <h3>Condivisione Risorse</h3>
+                            <p>Materiali e conoscenze condivise</p>
+                        </div>
+                    </div>
+                    <div class="collaboration-stats">
+                        <div class="collaboration-stat">
+                            <div class="collaboration-stat-value" id="shared-resources">0</div>
+                            <div class="collaboration-stat-label">Risorse</div>
+                        </div>
+                        <div class="collaboration-stat">
+                            <div class="collaboration-stat-value" id="knowledge-score">0</div>
+                            <div class="collaboration-stat-label">Punteggio</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Predictions Section -->
+        <div class="analytics-section" id="predictions-section">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Previsione Ritenzione</span>
+                        <div class="metric-icon">🔮</div>
+                    </div>
+                    <div class="metric-value" id="retention-forecast">0%</div>
+                    <div class="metric-change neutral" id="retention-confidence">
+                        <span>🎯</span> Confidenza: Media
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Trend Performance</span>
+                        <div class="metric-icon">📊</div>
+                    </div>
+                    <div class="metric-value" id="performance-trend">Stabile</div>
+                    <div class="metric-change neutral" id="performance-prediction">
+                        <span>📈</span> Prossime 5 sessioni
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Rischio Coinvolgimento</span>
+                        <div class="metric-icon">⚠️</div>
+                    </div>
+                    <div class="metric-value" id="engagement-risk">Basso</div>
+                    <div class="metric-change neutral" id="engagement-trend">
+                        <span>📉</span> Trend attuale
+                    </div>
+                </div>
+            </div>
+            
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Orari Ottimali di Studio</h3>
+                    </div>
+                    <div class="chart-content" id="optimal-times-chart">
+                        Grafico orari ottimali
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Progressione Difficoltà Prevista</h3>
+                    </div>
+                    <div class="chart-content" id="difficulty-progression-chart">
+                        Grafico progressione difficoltà
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recommendations Section -->
+        <div class="analytics-section" id="recommendations-section">
+            <div class="recommendations-container">
+                <div class="recommendations-header">
+                    Raccomandazioni Personalizzate
+                </div>
+                <div id="recommendations-list">
+                    <!-- Recommendations will be populated by JavaScript -->
+                    <div class="recommendation-item high-priority">
+                        <div class="recommendation-priority high">Alta Priorità</div>
+                        <div class="recommendation-message">
+                            Inizia a utilizzare il sistema di analytics per ricevere raccomandazioni personalizzate!
+                        </div>
+                        <div class="recommendation-actions">
+                            <span class="recommendation-action">Inizia una sessione di studio</span>
+                            <span class="recommendation-action">Completa un quiz</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

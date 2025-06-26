@@ -1,0 +1,54 @@
+{
+  "app": {
+    "name": "Cronologia Storica",
+    "version": "1.0.0",
+    "description": "Applicazione per tracciare date storiche, eventi e persone importanti",
+    "author": "Pietro",
+    "language": "it"
+  },
+  "storage": {
+    "type": "localStorage",
+    "prefix": "cronologia_",
+    "autoSave": true,
+    "backupInterval": 300000,
+    "maxBackups": 5
+  },
+  "ui": {
+    "theme": "default",
+    "itemsPerPage": 20,
+    "defaultTab": "timeline",
+    "showTooltips": true,
+    "animationDuration": 300
+  },
+  "timeline": {
+    "defaultSort": "date",
+    "defaultFilter": "all",
+    "groupBy": "period",
+    "showEmptyPeriods": false
+  },
+  "search": {
+    "minQueryLength": 2,
+    "maxResults": 50,
+    "highlightResults": true,
+    "searchDelay": 300
+  },
+  "validation": {
+    "requireEventTitle": true,
+    "requireEventDate": true,
+    "requirePersonName": true,
+    "maxTitleLength": 200,
+    "maxDescriptionLength": 1000
+  },
+  "export": {
+    "formats": ["json", "csv"],
+    "includeMetadata": true,
+    "dateFormat": "YYYY-MM-DD"
+  },
+  "logging": {
+    "enabled": true,
+    "level": "info",
+    "maxLogSize": 1000,
+    "logToConsole": true,
+    "logToFile": false
+  }
+}

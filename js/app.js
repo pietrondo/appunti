@@ -6,6 +6,20 @@ class AppManager {
         this.currentTab = 'timeline';
         this.isInitialized = false;
         this.managers = {};
+        this.configManager = new ConfigManager();
+        this.logger = logger; // Usa l'istanza globale del logger
+        this.storage = new StorageManager();
+        this.eventManager = new EventsManager();
+        this.peopleManager = new PeopleManager(this.storage);
+        this.timelineManager = new TimelineManager(this.storage);
+        this.searchManager = new SearchManager(this.storage);
+        this.studyManager = null;
+        this.mindMapManager = null;
+        this.analyticsManager = null;
+        this.learningAnalytics = null;
+        this.importManager = null;
+        this.exportManager = null;
+        
         this.init();
     }
 
@@ -29,7 +43,7 @@ class AppManager {
     /**
      * Inizializza l'applicazione dopo il caricamento del DOM
      */
-    initializeApp() {
+    async initializeApp() {
         try {
             // Inizializza storage
             this.initializeStorage();
@@ -42,6 +56,21 @@ class AppManager {
             
             // Carica dati iniziali
             this.loadInitialData();
+            
+            // Initialize study system
+            this.initializeStudySystem();
+            
+            // Initialize mind map system
+        this.initializeMindMapSystem();
+        
+        // Initialize analytics system
+            this.initializeAnalyticsSystem();
+            
+            // Initialize import system
+            this.initializeImportSystem();
+            
+            // Initialize export system
+            this.initializeExportSystem();
             
             // Imposta tab iniziale
             this.setActiveTab(this.currentTab);
@@ -118,6 +147,142 @@ class AppManager {
         });
     }
 
+    initializeStudySystem() {
+        // Initialize study system when available
+        if (typeof StudyManager !== 'undefined') {
+            this.studyManager = new StudyManager();
+            this.updateStudyPreview();
+        }
+    }
+    
+    initializeMindMapSystem() {
+        // Initialize mind map manager if available
+        if (window.MindMapManager) {
+            window.mindMapManager = new window.MindMapManager();
+            console.log('Mind map system initialized');
+        }
+    }
+    
+    initializeAnalyticsSystem() {
+        if (typeof LearningAnalytics !== 'undefined' && typeof AnalyticsManager !== 'undefined') {
+            this.learningAnalytics = new LearningAnalytics();
+            this.analyticsManager = new AnalyticsManager();
+            console.log('Analytics system initialized');
+        }
+    }
+    
+    initializeImportSystem() {
+        if (typeof ImportManager !== 'undefined') {
+            this.importManager = new ImportManager();
+            this.importManager.setManagers(this.eventManager, this.peopleManager);
+            
+            // Collega eventi dell'interfaccia
+            this.bindImportEvents();
+            
+            console.log('Import system initialized');
+        }
+    }
+    
+    bindImportEvents() {
+        // Pulsante trigger per aprire import
+        const importTrigger = document.getElementById('import-trigger');
+        if (importTrigger) {
+            importTrigger.addEventListener('click', () => {
+                this.importManager.openImportModal();
+            });
+        }
+        
+        // Pulsante per aprire import dal tab
+        const openImportModal = document.getElementById('open-import-modal');
+        if (openImportModal) {
+            openImportModal.addEventListener('click', () => {
+                this.importManager.openImportModal();
+            });
+        }
+        
+        // Pulsante per mostrare prompt ChatGPT
+        const showPromptBtn = document.getElementById('show-chatgpt-prompt');
+        if (showPromptBtn) {
+            showPromptBtn.addEventListener('click', () => {
+                this.importManager.showChatGPTPrompt();
+            });
+        }
+    }
+    
+    /**
+     * Inizializza il sistema di export
+     */
+    initializeExportSystem() {
+        if (typeof ExportManager !== 'undefined') {
+            this.exportManager = new ExportManager();
+            this.exportManager.setManagers(this.storage, this.logger);
+            
+            // Collega eventi dell'interfaccia
+            this.bindExportEvents();
+            
+            console.log('Export system initialized');
+        }
+    }
+    
+    bindExportEvents() {
+        // Pulsante trigger per aprire export
+        const exportTrigger = document.getElementById('export-trigger');
+        if (exportTrigger) {
+            exportTrigger.addEventListener('click', () => {
+                this.exportManager.openExportModal();
+            });
+        }
+    }
+    
+    initializeAnalyticsSystem() {
+        if (typeof LearningAnalytics !== 'undefined') {
+            this.learningAnalytics = new LearningAnalytics(this.storage);
+            this.analyticsManager = new AnalyticsManager(this.learningAnalytics);
+            console.log('Analytics system initialized');
+            
+            // Update analytics preview
+            this.updateAnalyticsPreview();
+        }
+    }
+    
+    updateAnalyticsPreview() {
+        if (this.learningAnalytics) {
+            const dashboardData = this.learningAnalytics.generateDashboardData();
+            
+            // Update preview elements if they exist
+            const previewElements = {
+                'analytics-sessions': dashboardData.overview?.totalSessions || 0,
+                'analytics-accuracy': Math.round((dashboardData.performance?.overallAccuracy || 0)) + '%',
+                'analytics-streak': dashboardData.overview?.streakDays || 0
+            };
+            
+            Object.entries(previewElements).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = value;
+                }
+            });
+        }
+    }
+    
+    updateStudyPreview() {
+        if (!this.studyManager) return;
+        
+        const stats = this.studyManager.getStudyStatistics();
+        const gamification = this.studyManager.gamification;
+        
+        // Update preview stats
+        const levelEl = document.getElementById('preview-level');
+        const streakEl = document.getElementById('preview-streak');
+        const cardsEl = document.getElementById('preview-cards');
+        const accuracyEl = document.getElementById('preview-accuracy');
+        
+        if (levelEl) levelEl.textContent = gamification.getCurrentLevel();
+        if (streakEl) streakEl.textContent = stats.currentStreak || 0;
+        if (cardsEl) cardsEl.textContent = stats.totalCardsStudied || 0;
+        if (accuracyEl) accuracyEl.textContent = `${Math.round(stats.overallAccuracy || 0)}%`;
+    }
+
     /**
      * Carica i dati iniziali
      */
@@ -172,6 +337,11 @@ class AppManager {
             history.pushState({ tab: tabName }, '', newUrl);
         }
         
+        // Update study preview if switching to study tab
+        if (tabName === 'study') {
+            this.updateStudyPreview();
+        }
+        
         // Trigger evento di cambio tab
         this.onTabChange(tabName);
     }
@@ -219,6 +389,38 @@ class AppManager {
                 this.setActiveTab(hash);
             }
         });
+        
+        // Study system button
+        const openStudyBtn = document.getElementById('open-study-btn');
+        if (openStudyBtn) {
+            openStudyBtn.addEventListener('click', () => {
+                if (this.studyManager) {
+                    this.studyManager.openStudyInterface();
+                }
+            });
+        }
+        
+        // Mind map system button
+        const openMindMapBtn = document.getElementById('open-mindmap-btn');
+        if (openMindMapBtn) {
+            openMindMapBtn.addEventListener('click', () => {
+                if (window.mindMapManager) {
+                    window.mindMapManager.openMindMapInterface();
+                }
+            });
+        }
+        
+        // Analytics button
+        const openAnalyticsBtn = document.getElementById('open-analytics-btn');
+        if (openAnalyticsBtn) {
+            openAnalyticsBtn.addEventListener('click', () => {
+                if (this.analyticsManager) {
+                    this.analyticsManager.openDashboard();
+                } else {
+                    console.warn('Analytics manager not initialized');
+                }
+            });
+        }
         
         // Gestione dell'hash iniziale
         const initialHash = window.location.hash.substring(1);
@@ -582,6 +784,41 @@ class AppManager {
                     toast.parentNode.removeChild(toast);
                 }
             }, 3000);
+        }
+    }
+    
+    /**
+     * Aggiorna tutte le visualizzazioni dopo l'importazione
+     */
+    refreshAllViews() {
+        try {
+            // Aggiorna timeline
+            if (this.timelineManager && typeof this.timelineManager.renderTimeline === 'function') {
+                this.timelineManager.renderTimeline();
+            }
+            
+            // Aggiorna lista eventi
+            if (this.eventManager && typeof this.eventManager.renderEvents === 'function') {
+                this.eventManager.renderEvents();
+            }
+            
+            // Aggiorna lista persone
+            if (this.peopleManager && typeof this.peopleManager.renderPeople === 'function') {
+                this.peopleManager.renderPeople();
+            }
+            
+            // Aggiorna statistiche
+            this.updateStats();
+            
+            // Aggiorna analytics se disponibile
+            if (this.analyticsManager && typeof this.analyticsManager.updateDashboard === 'function') {
+                this.analyticsManager.updateDashboard();
+            }
+            
+            this.logger.log('Tutte le visualizzazioni aggiornate dopo importazione');
+            
+        } catch (error) {
+            this.logger.error('Errore nell\'aggiornamento delle visualizzazioni', error);
         }
     }
 }

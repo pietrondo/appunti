@@ -1,0 +1,1028 @@
+/**
+ * Mind Map Styles - CSS per il sistema di mappe mentali
+ * Design moderno e interattivo per l'apprendimento
+ * 
+ * Funzionalità:
+ * - Interfaccia modale responsive
+ * - Canvas interattivo per le mappe
+ * - Toolbar con strumenti di editing
+ * - Tabs per organizzare le funzionalità
+ * - Animazioni fluide
+ * - Dark mode support
+ * - Accessibilità migliorata
+ * 
+ * @author Sistema di Studio Cronologia Storica
+ * @version 1.0.0
+ */
+
+/* ===== MIND MAP CONTAINER ===== */
+.mindmap-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mindmap-container.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mindmap-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    cursor: pointer;
+}
+
+/* ===== MIND MAP MODAL ===== */
+.mindmap-modal {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 1400px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mindmap-container.show .mindmap-modal {
+    transform: scale(1) translateY(0);
+}
+
+/* ===== HEADER ===== */
+.mindmap-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 16px 16px 0 0;
+}
+
+.mindmap-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mindmap-close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.mindmap-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* ===== TABS ===== */
+.mindmap-tabs {
+    display: flex;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 0 24px;
+}
+
+.mindmap-tab {
+    background: none;
+    border: none;
+    padding: 16px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6c757d;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.mindmap-tab:hover {
+    color: #495057;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.mindmap-tab.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    background: white;
+}
+
+.mindmap-tab.active::before {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: white;
+}
+
+/* ===== CONTENT ===== */
+.mindmap-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.mindmap-tab-content {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.mindmap-tab-content.active {
+    display: flex;
+}
+
+/* ===== TOOLBAR ===== */
+.mindmap-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    flex-wrap: wrap;
+}
+
+.toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    border-right: 1px solid #dee2e6;
+}
+
+.toolbar-group:last-child {
+    border-right: none;
+    margin-left: auto;
+}
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.toolbar-btn:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+    transform: translateY(-1px);
+}
+
+.toolbar-btn.primary {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.toolbar-btn.primary:hover {
+    background: #5a6fd8;
+    border-color: #5a6fd8;
+}
+
+.toolbar-btn .icon {
+    font-size: 14px;
+}
+
+/* ===== CANVAS CONTAINER ===== */
+.mindmap-canvas-container {
+    flex: 1;
+    position: relative;
+    background: #ffffff;
+    overflow: hidden;
+    display: flex;
+}
+
+.mindmap-canvas {
+    flex: 1;
+    cursor: grab;
+    background: radial-gradient(circle at 20px 20px, #e9ecef 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.mindmap-canvas:active {
+    cursor: grabbing;
+}
+
+/* ===== NODE INFO PANEL ===== */
+.mindmap-info {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    z-index: 100;
+}
+
+.node-info {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    transform: translateX(320px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.node-info:not(.hidden) {
+    transform: translateX(0);
+}
+
+.node-info h4 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.node-info h4::before {
+    content: '🎯';
+    font-size: 18px;
+}
+
+.node-info input,
+.node-info textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.node-info input:focus,
+.node-info textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.node-info textarea {
+    min-height: 80px;
+    max-height: 120px;
+}
+
+/* ===== COLOR PICKER ===== */
+.color-picker {
+    margin-bottom: 16px;
+}
+
+.color-picker label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6c757d;
+    margin-bottom: 8px;
+}
+
+.color-options {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.color-option {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.color-option.selected {
+    border-color: #2c3e50;
+    transform: scale(1.1);
+}
+
+.color-option.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== NODE ACTIONS ===== */
+.node-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+/* ===== LIBRARY TAB ===== */
+.mindmap-library {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.library-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.library-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.mindmap-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.mindmap-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.mindmap-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: #667eea;
+}
+
+.mindmap-preview {
+    height: 120px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.preview-icon {
+    font-size: 48px;
+    opacity: 0.8;
+}
+
+.mindmap-details {
+    padding: 16px;
+}
+
+.mindmap-details h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.mindmap-meta {
+    font-size: 12px;
+    color: #6c757d;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.mindmap-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.mindmap-actions button {
+    flex: 1;
+    padding: 6px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.load-mindmap-btn {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.load-mindmap-btn:hover {
+    background: #5a6fd8;
+}
+
+.duplicate-mindmap-btn {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.duplicate-mindmap-btn:hover {
+    background: #218838;
+}
+
+.delete-mindmap-btn {
+    background: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.delete-mindmap-btn:hover {
+    background: #c82333;
+}
+
+/* ===== EMPTY LIBRARY ===== */
+.empty-library {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-library h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.empty-library p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* ===== TEMPLATES TAB ===== */
+.templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.template-card {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.template-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: #667eea;
+}
+
+.template-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.8;
+}
+
+.template-card h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.template-card p {
+    margin: 0 0 16px 0;
+    font-size: 14px;
+    color: #6c757d;
+    line-height: 1.4;
+}
+
+.use-template-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.use-template-btn:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
+}
+
+/* ===== EXPORT TAB ===== */
+.export-options {
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.export-options h3 {
+    margin: 0 0 24px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.export-formats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.export-btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.export-btn:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.export-btn .icon {
+    font-size: 32px;
+    opacity: 0.8;
+}
+
+.export-btn h4 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.export-btn p {
+    margin: 0;
+    font-size: 13px;
+    color: #6c757d;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .mindmap-modal {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+    }
+    
+    .mindmap-header {
+        padding: 16px 20px;
+        border-radius: 0;
+    }
+    
+    .mindmap-header h2 {
+        font-size: 20px;
+    }
+    
+    .mindmap-tabs {
+        padding: 0 20px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .mindmap-tabs::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .mindmap-tab {
+        padding: 12px 16px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+    
+    .mindmap-toolbar {
+        padding: 12px 20px;
+        gap: 12px;
+    }
+    
+    .toolbar-group {
+        gap: 6px;
+        padding: 0 8px;
+    }
+    
+    .toolbar-btn {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+    
+    .toolbar-btn .icon {
+        font-size: 12px;
+    }
+    
+    .node-info {
+        width: calc(100vw - 40px);
+        right: 20px;
+        left: 20px;
+        transform: translateY(100vh);
+    }
+    
+    .node-info:not(.hidden) {
+        transform: translateY(0);
+    }
+    
+    .mindmap-library,
+    .export-options {
+        padding: 16px 20px;
+    }
+    
+    .mindmap-list {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .templates-grid {
+        grid-template-columns: 1fr;
+        padding: 16px 20px;
+        gap: 16px;
+    }
+    
+    .export-formats {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .mindmap-header {
+        padding: 12px 16px;
+    }
+    
+    .mindmap-tabs {
+        padding: 0 16px;
+    }
+    
+    .mindmap-toolbar {
+        padding: 8px 16px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .toolbar-group {
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+        padding: 8px 0;
+        justify-content: center;
+    }
+    
+    .toolbar-group:last-child {
+        border-bottom: none;
+        margin-left: 0;
+    }
+    
+    .mindmap-library,
+    .export-options,
+    .templates-grid {
+        padding: 12px 16px;
+    }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    .mindmap-modal {
+        background: #1a1a1a;
+        color: #e9ecef;
+    }
+    
+    .mindmap-tabs {
+        background: #2c2c2c;
+        border-bottom-color: #404040;
+    }
+    
+    .mindmap-tab {
+        color: #adb5bd;
+    }
+    
+    .mindmap-tab:hover {
+        color: #e9ecef;
+        background: rgba(102, 126, 234, 0.2);
+    }
+    
+    .mindmap-tab.active {
+        background: #1a1a1a;
+        color: #667eea;
+    }
+    
+    .mindmap-toolbar {
+        background: #2c2c2c;
+        border-bottom-color: #404040;
+    }
+    
+    .toolbar-group {
+        border-right-color: #404040;
+    }
+    
+    .toolbar-btn {
+        background: #404040;
+        border-color: #555;
+        color: #e9ecef;
+    }
+    
+    .toolbar-btn:hover {
+        background: #555;
+        border-color: #666;
+    }
+    
+    .mindmap-canvas {
+        background: #1a1a1a;
+    }
+    
+    .node-info {
+        background: #2c2c2c;
+        border-color: #404040;
+    }
+    
+    .node-info h4 {
+        color: #e9ecef;
+    }
+    
+    .node-info input,
+    .node-info textarea {
+        background: #404040;
+        border-color: #555;
+        color: #e9ecef;
+    }
+    
+    .node-info input:focus,
+    .node-info textarea:focus {
+        border-color: #667eea;
+    }
+    
+    .mindmap-card,
+    .template-card,
+    .export-btn {
+        background: #2c2c2c;
+        border-color: #404040;
+    }
+    
+    .mindmap-card:hover,
+    .template-card:hover,
+    .export-btn:hover {
+        border-color: #667eea;
+    }
+    
+    .mindmap-details h4,
+    .template-card h4,
+    .export-btn h4 {
+        color: #e9ecef;
+    }
+    
+    .empty-library {
+        color: #adb5bd;
+    }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+    .mindmap-container,
+    .mindmap-modal,
+    .node-info,
+    .mindmap-card,
+    .template-card,
+    .export-btn,
+    .toolbar-btn,
+    .color-option {
+        transition: none;
+    }
+}
+
+/* Focus styles for keyboard navigation */
+.mindmap-close-btn:focus,
+.mindmap-tab:focus,
+.toolbar-btn:focus,
+.btn-primary:focus,
+.btn-secondary:focus,
+.use-template-btn:focus,
+.export-btn:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .mindmap-modal {
+        border: 2px solid;
+    }
+    
+    .mindmap-tab.active {
+        border-bottom-width: 4px;
+    }
+    
+    .toolbar-btn,
+    .btn-primary,
+    .btn-secondary,
+    .use-template-btn {
+        border-width: 2px;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.mindmap-card:hover .preview-icon {
+    animation: pulse 2s infinite;
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+.mindmap-library::-webkit-scrollbar,
+.export-options::-webkit-scrollbar,
+.templates-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.mindmap-library::-webkit-scrollbar-track,
+.export-options::-webkit-scrollbar-track,
+.templates-grid::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.mindmap-library::-webkit-scrollbar-thumb,
+.export-options::-webkit-scrollbar-thumb,
+.templates-grid::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.mindmap-library::-webkit-scrollbar-thumb:hover,
+.export-options::-webkit-scrollbar-thumb:hover,
+.templates-grid::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .mindmap-container {
+        position: static;
+        width: auto;
+        height: auto;
+    }
+    
+    .mindmap-overlay {
+        display: none;
+    }
+    
+    .mindmap-modal {
+        width: 100%;
+        height: auto;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .mindmap-header,
+    .mindmap-tabs,
+    .mindmap-toolbar {
+        display: none;
+    }
+    
+    .mindmap-canvas-container {
+        height: 80vh;
+    }
+    
+    .node-info {
+        position: static;
+        width: 100%;
+        margin-top: 20px;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+}

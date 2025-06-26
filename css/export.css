@@ -1,0 +1,444 @@
+/* Export/Import Modal Styles */
+.export-modal-content {
+    max-width: 600px;
+    width: 90%;
+}
+
+.export-tabs {
+    display: flex;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-btn:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+.tab-btn.active {
+    color: #2196F3;
+    border-bottom-color: #2196F3;
+    background: #f8f9ff;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Export Section */
+.export-section,
+.import-section {
+    padding: 20px 0;
+}
+
+.export-section h3,
+.import-section h3 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.export-section p,
+.import-section p {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.export-options {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.export-options label {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #333;
+}
+
+.export-options input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+.export-actions,
+.import-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-primary {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1976D2;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.btn-info {
+    background: #17a2b8;
+    color: white;
+}
+
+.btn-info:hover {
+    background: #138496;
+    transform: translateY(-1px);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline:hover {
+    background: #6c757d;
+    color: white;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn:disabled:hover {
+    transform: none !important;
+}
+
+/* Import Section */
+.import-options {
+    margin: 20px 0;
+}
+
+.file-upload {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px dashed #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.file-upload:hover {
+    border-color: #2196F3;
+    background: #f0f8ff;
+}
+
+.file-name {
+    color: #666;
+    font-style: italic;
+    flex: 1;
+}
+
+.file-name:empty::before {
+    content: "Nessun file selezionato";
+    color: #999;
+}
+
+.import-mode {
+    margin: 20px 0;
+    padding: 15px;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+}
+
+.import-mode label {
+    display: block;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #856404;
+}
+
+.import-mode input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+.import-preview {
+    margin: 20px 0;
+    padding: 15px;
+    background: #e8f5e8;
+    border: 1px solid #c3e6c3;
+    border-radius: 8px;
+}
+
+.import-preview h4 {
+    color: #155724;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.import-data-preview .preview-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #c3e6c3;
+}
+
+.import-data-preview .preview-item:last-child {
+    border-bottom: none;
+}
+
+.import-data-preview .preview-item strong {
+    color: #155724;
+}
+
+.export-preview {
+    padding: 15px;
+    background: #e3f2fd;
+    border: 1px solid #bbdefb;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.export-preview h4 {
+    color: #0d47a1;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.export-preview .preview-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #bbdefb;
+}
+
+.export-preview .preview-item:last-child {
+    border-bottom: none;
+}
+
+.export-preview .preview-item strong {
+    color: #0d47a1;
+}
+
+/* Toast Messages */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 500;
+    z-index: 10000;
+    animation: slideInRight 0.3s ease;
+    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.toast.success {
+    background: #28a745;
+}
+
+.toast.error {
+    background: #dc3545;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .export-modal-content {
+        background: #2d2d2d;
+        color: #e0e0e0;
+    }
+    
+    .export-tabs {
+        border-bottom-color: #444;
+    }
+    
+    .tab-btn {
+        color: #ccc;
+    }
+    
+    .tab-btn:hover {
+        background: #3d3d3d;
+        color: #fff;
+    }
+    
+    .tab-btn.active {
+        background: #1a1a2e;
+        color: #64b5f6;
+        border-bottom-color: #64b5f6;
+    }
+    
+    .export-section h3,
+    .import-section h3 {
+        color: #e0e0e0;
+    }
+    
+    .export-section p,
+    .import-section p {
+        color: #bbb;
+    }
+    
+    .export-options {
+        background: #3d3d3d;
+        border-color: #555;
+    }
+    
+    .export-options label {
+        color: #e0e0e0;
+    }
+    
+    .file-upload {
+        background: #3d3d3d;
+        border-color: #555;
+    }
+    
+    .file-upload:hover {
+        border-color: #64b5f6;
+        background: #1a1a2e;
+    }
+    
+    .file-name {
+        color: #bbb;
+    }
+    
+    .import-mode {
+        background: #3d3d3d;
+        border-color: #666;
+    }
+    
+    .import-mode label {
+        color: #e0e0e0;
+    }
+    
+    .import-preview {
+        background: #2d4a2d;
+        border-color: #4a6b4a;
+    }
+    
+    .import-preview h4 {
+        color: #81c784;
+    }
+    
+    .import-data-preview .preview-item {
+        border-bottom-color: #4a6b4a;
+    }
+    
+    .import-data-preview .preview-item strong {
+        color: #81c784;
+    }
+    
+    .export-preview {
+        background: #1a2332;
+        border-color: #3d5a7a;
+    }
+    
+    .export-preview h4 {
+        color: #64b5f6;
+    }
+    
+    .export-preview .preview-item {
+        border-bottom-color: #3d5a7a;
+    }
+    
+    .export-preview .preview-item strong {
+        color: #64b5f6;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .export-modal-content {
+        width: 95%;
+        margin: 10px;
+    }
+    
+    .export-actions,
+    .import-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .file-upload {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .toast {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+}
