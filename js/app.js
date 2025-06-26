@@ -47,6 +47,9 @@ class AppManager {
         try {
             // Inizializza storage
             this.initializeStorage();
+
+            // Applica il tema salvato
+            this.applyTheme();
             
             // Inizializza navigazione
             this.initializeNavigation();
@@ -785,6 +788,15 @@ class AppManager {
                 }
             }, 3000);
         }
+    }
+
+    /**
+     * Applica il tema salvato nelle impostazioni
+     */
+    applyTheme() {
+        const settings = this.storage.getSettings();
+        const isDark = settings && settings.theme === 'dark';
+        document.body.classList.toggle('dark-mode', isDark);
     }
     
     /**
