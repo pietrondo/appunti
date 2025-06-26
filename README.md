@@ -39,6 +39,7 @@
 
 - **🚀 Zero Dipendenze**: Costruito con tecnologie web standard (HTML, CSS, JavaScript)
 - **💾 Storage Locale**: Dati salvati in localStorage del browser
+- **☁️ Cloud Storage (opzionale)**: Integrazione sperimentale con [Supabase](https://supabase.com) per sincronizzare i dati gratuitamente
 - **🔧 Architettura Modulare**: Sistema di manager specializzati per ogni funzionalità
 - **⚙️ ConfigManager**: Gestione centralizzata delle configurazioni
 - **📝 Logger System**: Sistema di logging completo con livelli e esportazione
@@ -406,6 +407,7 @@ runAllTests();
 
 ### Versione 1.2.0 (Q3 2024)
 - ☁️ Sincronizzazione cloud
+-   - Integrazione prevista tramite servizio gratuito Supabase
 - 👥 Collaborazione multi-utente
 - 🔌 Sistema plugin
 - 📄 Export PDF avanzato

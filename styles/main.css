@@ -605,3 +605,29 @@ body {
         padding: 1rem;
     }
 }
+
+/* Dark mode base */
+body.dark-mode {
+    background-color: #1a202c;
+    color: #e2e8f0;
+}
+
+body.dark-mode .header {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+}
+
+body.dark-mode .nav-btn {
+    background: rgba(255,255,255,0.1);
+    color: #e2e8f0;
+}
+
+body.dark-mode .nav-btn.active {
+    background: #e2e8f0;
+    color: #2d3748;
+}
+
+body.dark-mode .card,
+body.dark-mode .tab-header h2 {
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
