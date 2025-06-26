@@ -2,10 +2,11 @@
  * Backup Manager - Gestisce backup automatici e manuali dei dati
  */
 class BackupManager {
-    constructor() {
+    constructor(configManager = null) {
+        this.configManager = configManager || (typeof window !== 'undefined' && window.appManager ? window.appManager.configManager : null);
         this.backupPrefix = 'cronologia_backup_';
-        this.maxBackups = 5;
-        this.autoBackupInterval = 300000; // 5 minuti
+        this.maxBackups = this.configManager?.get('storage.maxBackups', 5) || 5;
+        this.autoBackupInterval = this.configManager?.get('storage.backupInterval', 300000) || 300000; // 5 minuti default
         this.autoBackupTimer = null;
         this.init();
     }
@@ -338,8 +339,10 @@ class BackupManager {
     }
 }
 
-// Istanza globale del backup manager
-const backupManager = new BackupManager();
+// Istanza globale del backup manager (solo in ambiente browser)
+if (typeof window !== 'undefined') {
+    window.backupManager = new BackupManager();
+}
 
 // Esporta per uso in altri moduli
 if (typeof module !== 'undefined' && module.exports) {
