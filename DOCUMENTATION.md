@@ -299,6 +299,7 @@ storage.validateEvent(eventData)
 storage.validatePerson(personData)
 
 // Export dati
+// format può essere 'json' o 'csv'
 storage.exportData(format)
 
 // Import dati
@@ -437,8 +438,11 @@ Per aggiungere nuovi periodi, modifica:
 #### Export/Import
 
 ```javascript
-// Export tutti i dati
+// Export tutti i dati in JSON
 storage.exportData('json');
+
+// Export in CSV
+storage.exportData('csv');
 
 // Import da file
 const fileInput = document.getElementById('import-file');
