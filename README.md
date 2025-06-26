@@ -182,7 +182,8 @@ Modifica `config.json` per personalizzare:
   },
   "storage": {
     "autoSave": true,
-    "backupInterval": 300000
+    "backupInterval": 300000,
+    "maxBackups": 5
   }
 }
 ```
